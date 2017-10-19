@@ -51,7 +51,66 @@ public class BuyForeignCurrencyTest {
 	}
 
 	@Test
-	public void buyForeignCurrencyFailedTest() throws InterruptedException {
+	public void buyForeignCurrencyFailedGivenNoDataTest() throws InterruptedException {
+
+		WebElement element = driver.findElement(By.name("Allow"));
+		element.click();
+
+	
+		element = driver.findElement(By.name("驗證碼"));
+
+		WebElement element1 = driver.findElement(By.name("身分證字號"));
+		WebElement element2 = driver.findElement(By.name("使用者名稱"));
+		WebElement element3 = driver.findElement(By.name("使用者密碼"));
+		
+		element1.sendKeys(accountProperties.get("id"));
+		element2.sendKeys(accountProperties.get("account"));
+		element3.sendKeys(accountProperties.get("password"));
+		
+		
+		
+		String code = readFromStdin();
+		element.sendKeys(code);
+
+	
+		driver.getKeyboard().sendKeys(Keys.ENTER);
+
+		// 判斷是否已登入
+		List<MobileElement> loginElements = driver.findElements(By.name("確定"));
+
+		if (loginElements.size() > 0) {
+			loginElements.get(0).click();
+		}
+
+		element = driver.findElement(By.name("略過"));
+		element.click();
+
+		element = driver.findElement(By.name("確定"));
+		element.click();
+
+		element = driver.findElement(By.name("完成"));
+		element.click();
+		
+		element = driver.findElement(By.name("我知道了 !"));
+		element.click();
+
+		element = driver.findElement(By.name("side menu btn"));
+		element.click();
+
+		element = driver.findElement(By.name("外幣匯兌"));
+		element.click();
+
+		element = driver.findElement(By.name("買外幣"));
+		element.click();
+
+		List<MobileElement> expectedElements = driver.findElements(By.name("查無資料"));
+
+		assertThat(expectedElements.size(), equalTo(1));
+
+	}
+	
+	@Test
+	public void buyForeignCurrencyFailedGivenNoBalanceTest() throws InterruptedException {
 
 		WebElement element = driver.findElement(By.name("Allow"));
 		element.click();
@@ -126,7 +185,7 @@ public class BuyForeignCurrencyTest {
 		assertThat(expectedElements.size(), equalTo(1));
 
 	}
-	
+
 	
 	@Test
 	public void buyForeignCurrencySuccessTest() throws InterruptedException {
